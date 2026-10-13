@@ -1,0 +1,952 @@
+/* =========================================================
+   1. VARIABLES: change colors, spacing and fonts here
+   ========================================================= */
+:root {
+  --bg: #091a1e;          /* deep petrol */
+  --surface: #10262c;     /* cards and panels */
+  --surface-2: #17353b;   /* hover surfaces */
+  --border: #2c2845;      /* subtle purple-grey lines */
+  --grid: rgba(113, 189, 176, 0.075);
+  --text: #efecfa;
+  --muted: #a9a5c4;
+  --accent: #a78bfa;      /* violet: brand color (links, buttons, focus) */
+
+  /* Code-editor style colors: each one has a job */
+  --green: #4ade80;       /* terminal output, status, email */
+  --amber: #fbbf24;       /* JavaScript, "edit me" notes */
+  --orange: #fb923c;      /* HTML */
+  --coral: #fb7185;       /* Java */
+  --pink: #f472b6;        /* CSS */
+  --sky: #38bdf8;         /* Python, PowerShell */
+  --lime: #a3e635;        /* Git */
+  --glow: 0 0 0 1px rgba(167, 139, 250, 0.3), 0 12px 40px -12px rgba(167, 139, 250, 0.4);
+
+  --radius: 16px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+  --space-5: 72px;
+  --rail-width: 240px;
+
+  --grad-1: #2b0f8f;      /* royal blue-violet */
+  --grad-2: #7b2ff7;      /* electric purple */
+  --grad-3: #e0309a;      /* hot pink */
+  --grad-4: #ff7a45;      /* sunset orange */
+
+
+  /* System fonts only, so the site works offline with no downloads */
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+}
+
+/* =========================================================
+   2. BASE STYLES
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* padding and border stay inside the set width */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.65;
+  
+}
+
+
+
+a {
+  color: var(--accent);
+}
+
+/* Visible keyboard focus for every link */
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* =========================================================
+   3. LAYOUT + NAVIGATION (mobile first: top bar)
+   ========================================================= */
+.layout {
+  display: block;
+}
+
+.content {
+  min-width: 0;
+  padding: 0 var(--space-3);
+}
+
+/* Flexbox: logo and links sit in one row */
+.rail {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px var(--space-2);
+  background: rgba(9, 26, 30, 0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+/* Name logo: wide capital letters between glowing brackets */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.logo-text {
+  padding-bottom: 2px;
+  border-bottom: 2px solid var(--green);
+}
+
+.logo-bracket {
+  display: inline-block;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.7);
+  transition: transform 0.25s ease;
+}
+
+/* On hover the brackets slide outward */
+.logo:hover .logo-bracket:first-child { transform: translateX(-4px); }
+.logo:hover .logo-bracket:last-child  { transform: translateX(4px); }
+
+.rail nav {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Links scroll sideways inside the bar on small screens, so the page never does */
+.nav-list {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.nav-list a {
+  display: block;
+  min-height: 44px;           /* easy to tap */
+  padding: 11px 14px;
+  border-radius: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-list a:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+/* GitHub button at the bottom of the side rail (desktop only) */
+.rail-link {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rail-link svg {
+  display: block;
+  width: 27px;
+  height: 27px;
+  color: var(--accent);
+  transition: transform 0.4s ease;
+}
+
+.rail-link-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.rail-link-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.rail-link-user {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.rail-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+.rail-link:hover svg {
+  transform: rotate(360deg);
+}
+
+/* =========================================================
+   4. SECTIONS (shared)
+   ========================================================= */
+.section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-5) 0 var(--space-3);
+  scroll-margin-top: 56px; /* keeps headings clear of the sticky top bar */
+}
+
+.section h2 {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(29px, 4vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* The "~/" prefix is decorative, like a folder path in a terminal */
+.section h2::before {
+  content: "~/";
+  content: "~/" / "";
+  margin-right: 0.35em;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.section-note {
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
+}
+
+.lead {
+  margin: 0;
+  font-size: clamp(18px, 2.6vw, 22px);
+  line-height: 1.5;
+}
+
+/* =========================================================
+   5. BUTTONS
+   ========================================================= */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 11px 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  /* Transition: smooth hover effect */
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+              background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #0d0a1a;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--glow);
+}
+
+.btn-ghost {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-small {
+  min-height: 44px;
+  padding: 8px 18px;
+  font-size: 15px;
+}
+
+/* =========================================================
+   6. HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--space-4);
+  align-items: center;
+  padding-top: var(--space-4);
+}
+  
+/* Faint grid behind the hero, faded out toward the edges */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--space-3));
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse at 70% 45%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 70% 45%, #000 10%, transparent 70%);
+}
+
+.hero h1 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(42px, 8vw, 84px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.hero-role {
+  margin: 0 0 var(--space-2);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 2.4vw, 20px);
+}
+
+.hero-intro {
+  max-width: 544px;
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
+}
+
+/* ----- Orbit: rings of skills, built with CSS only ----- */
+.orbit {
+  position: relative;
+  width: min(100%, 416px);
+  aspect-ratio: 1;
+  justify-self: center;
+}
+
+.orbit::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.14), transparent 65%);
+}
+
+.core {
+  position: absolute;
+  inset: 43%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 2.5vw, 18px);
+  box-shadow: var(--glow);
+}
+
+.ring {
+  position: absolute;
+  border: 1px dashed var(--border);
+  border-radius: 50%;
+  /* Two animations: endless spin, plus a one-time fade-in on page load */
+  animation: spin var(--t) linear infinite, fade-in 1.2s ease-out both;
+  animation-delay: 0s, var(--d);
+}
+
+.ring-1 { inset: 4%;  --t: 60s; --d: 0.1s; }
+.ring-2 { inset: 20%; --t: 40s; --d: 0.4s; }
+.ring-3 { inset: 34%; --t: 25s; --d: 0.7s; }
+
+.node {
+  position: absolute;
+  padding: 4px 11px;
+  border: 1px solid var(--c, var(--accent));
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--c, var(--text));
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  /* Spins the opposite way so the label stays upright */
+  animation: unspin var(--t) linear infinite;
+}
+
+.at-top    { top: 0;    left: 50%; }
+.at-bottom { top: 100%; left: 50%; }
+.at-left   { top: 50%;  left: 0; }
+.at-right  { top: 50%;  left: 100%; }
+
+/* @keyframes animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes unspin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* =========================================================
+   7. ABOUT
+   ========================================================= */
+.about-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.about-grid p:not(.lead) {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* =========================================================
+   8. SKILLS: grouped rows instead of identical cards
+   ========================================================= */
+.skill-row {
+  display: grid;
+  gap: 12px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+}
+
+.skill-row h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* --c is the chip's own color. It is set by the .c-... classes further down. */
+.chips li {
+  --c: var(--accent);
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-color: color-mix(in srgb, var(--c) 50%, transparent);
+  border-radius: 999px;
+  background: var(--surface);
+  background: color-mix(in srgb, var(--c) 10%, var(--surface));
+  color: var(--c);
+  font-weight: 600;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.chips li:hover {
+  border-color: var(--c);
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   9. PROJECTS: CSS Grid
+   ========================================================= */
+.project-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr; /* phones: one column */
+}
+
+.card {
+  --c: var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--c);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+/* Hover: the card lifts and tilts. Even cards tilt the other way. */
+.card:hover {
+  transform: translateY(-6px) rotate(-2deg);
+  border-color: var(--c);
+  box-shadow: 0 0 0 1px var(--c), 0 14px 40px -14px var(--c);
+}
+
+.card:nth-child(even):hover {
+  transform: translateY(-6px) rotate(2deg);
+}
+
+/* Icon badge at the top of each card */
+.card-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--c);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  color: var(--c);
+  transition: transform 0.35s ease;
+}
+
+.card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.card:hover .card-icon {
+  transform: rotate(-12deg) scale(1.12);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  --c: var(--green);
+  padding: 2px 10px;
+  border: 1px solid var(--border);
+  border-color: color-mix(in srgb, var(--c) 40%, transparent);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  color: var(--c);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* The two buttons (Live Preview + View on GitHub) sit in a row at the bottom
+   of the card. If the card is too narrow, the second button wraps below. */
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+/* Button size is unchanged from before */
+.btn-github {
+  gap: 8.8px;
+  min-height: 52px;
+  padding: 12px 22.4px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.btn-github svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Placeholder cards: dashed so they look unfinished on purpose */
+.card-placeholder {
+  --c: var(--amber); /* amber = "needs editing" */
+  border-style: dashed;
+  border-top-width: 1px;
+  background: transparent;
+  text-decoration: none;
+}
+
+.badge {
+  --c: var(--green); /* green = status */
+  padding: 2px 10px;
+  border: 1px solid var(--border);
+  border-color: color-mix(in srgb, var(--c) 50%, transparent);
+  border-radius: 999px;
+  color: var(--c);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* Color classes: one color per technology / card.
+   They set --c, which the chips, tags, orbit labels and cards read. */
+.c-html   { --c: var(--orange); }
+.c-css    { --c: var(--pink); }
+.c-js     { --c: var(--amber); }
+.c-python { --c: var(--sky); }
+.c-java   { --c: var(--coral); }
+.c-git    { --c: var(--lime); }
+.c-github { --c: var(--text); }
+.c-node   { --c: var(--green); }
+.c-ps     { --c: var(--sky); }
+.card-green { --c: var(--green); }
+.card-sky   { --c: var(--sky); }
+
+.card-placeholder .badge { --c: var(--amber); }
+
+/* =========================================================
+   10. EDUCATION: heading row + timeline with logos
+   ========================================================= */
+
+/* Heading on the left, LinkedIn button on the top right */
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.section-head h2 {
+  margin: 0;
+}
+
+.linkedin-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: 224px;
+  min-height: 84px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.linkedin-link:hover {
+  transform: translateY(-2px);
+  border-color: #0a66c2;
+  box-shadow: 0 10px 28px -14px rgba(10, 102, 194, 0.75);
+}
+
+.linkedin-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #0a66c2;
+  color: #fff;
+}
+
+.linkedin-icon svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.linkedin-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.linkedin-label strong {
+  font-size: 16px;
+}
+
+.linkedin-label small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.timeline {
+  margin-left: 8px;
+  padding-left: 32px;
+  border-left: 2px solid var(--border);
+}
+
+/* Each item: logo on the left, text on the right */
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.timeline-item + .timeline-item {
+  margin-top: var(--space-4);
+}
+
+/* The glowing dot on the line */
+.timeline-item.bnps::before{
+   content: "";
+  position: absolute;
+  top: 21px;
+  left: -40px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: red;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 14px var(--green);
+}
+.timeline-item.iitm::before{
+   content: "";
+  position: absolute;
+  top: 21px;
+  left: -40px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 14px var(--green);
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: -40px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 14px var(--green);
+}
+
+/* Logo box: shows the initials until the logo image loads on top of them */
+.edu-logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.edu-initials {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.edu-logo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.education-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.timeline-item h3 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.timeline-item p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* =========================================================
+   11. CONTACT + FOOTER
+   ========================================================= */
+.contact-panel {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.email-link {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: clamp(17px, 3.6vw, 26px);
+  overflow-wrap: anywhere; /* long emails wrap instead of overflowing */
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  max-width: 960px;
+  margin: var(--space-4) auto 0;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* =========================================================
+   12. RESPONSIVE: media queries
+   ========================================================= */
+
+/* Larger phones and small tablets */
+@media (min-width: 640px) {
+  .logo {
+    font-size: 17px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1.3fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .skill-row {
+    grid-template-columns: 224px 1fr;
+    align-items: center;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr); /* tablets: two columns */
+  }
+}
+
+/* Laptops and desktops: nav becomes a vertical side rail */
+@media (min-width: 960px) {
+  .layout {
+    display: grid;
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+  }
+
+  .rail {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    height: 100vh;
+    padding: var(--space-3);
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    border-bottom: 0;
+  }
+
+  .rail nav {
+    flex: 0 0 auto;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .rail-link {
+    display: flex;
+    margin-top: auto;
+  }
+
+  .content {
+    padding: 0 var(--space-4);
+  }
+
+  .section {
+    scroll-margin-top: 0; /* no sticky top bar on desktop */
+  }
+}
+
+/* Small phones: LinkedIn button takes the full width under the heading */
+@media (max-width: 544px) {
+  .linkedin-link {
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    min-height: 72px;
+  }
+}
+
+/* Wide screens: hero splits in two */
+@media (min-width: 1200px) {
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+/* =========================================================
+   13. ACCESSIBILITY: respect "reduce motion" settings
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
